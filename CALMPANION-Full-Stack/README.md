@@ -22,8 +22,7 @@ Make sure you have the following installed:
 ### Installation
 1. Clone the repository:
    ```sh
-   git clone https://github.com/kingnavneeth094/CALMPANION.git
-   cd CALMPANION
+   git clone https://(https://github.com/Navanith-Krishna-R/Full-Stack-CALMPANION/edit/main/CALMPANION-Full-Stack)
    ```
 2. Install dependencies:
    ```sh
