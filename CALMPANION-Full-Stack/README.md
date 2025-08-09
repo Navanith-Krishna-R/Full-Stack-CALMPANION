@@ -42,7 +42,7 @@ We welcome contributions from the community! Follow these steps:
 5. Create a Pull Request
 
 ## 📧 Contact
-For any inquiries or feedback, visit our website: [Navneeth](https://kingnavneeth.vercel.app/)
+For any inquiries or feedback, visit our website: [Navanith Krishna R](https://kingnavneeth.vercel.app/)
 
 ---
 🌱 *Your mental well-being matters. CALMPANION is here to help!*
