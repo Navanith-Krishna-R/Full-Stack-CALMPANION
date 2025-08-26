@@ -28,7 +28,7 @@ export default function RootLayout({
             {/* ✅ Add Header and Footer */}
             <Header />
             {children}
-            <Footer />
+            
           </UserProvider>
           <Analytics />
         </ThemeProvider>
