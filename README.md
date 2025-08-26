@@ -1,27 +1,33 @@
 # CALMPANION 🧘‍♂️
 
-## 🌟 About the Project
-**CALMPANION** is a comprehensive online platform dedicated to **mental health awareness and support**. It empowers users to take charge of their mental well-being through educational resources, appointments with professionals, donations to mental health initiatives, and sharing experiences via blogs.
+## 🌟 Project Overview
+**CALMPANION** is a comprehensive online platform dedicated to **mental health awareness and support**.  
+It empowers users to take control of their mental well-being by providing:
 
-The platform focuses on providing a **secure, accessible, and supportive environment** for everyone.
+- Educational resources about mental health  
+- Scheduling appointments with certified professionals  
+- Secure donations to mental health initiatives  
+- Sharing experiences via blogs  
+
+The platform emphasizes **security, accessibility, and a supportive environment** for all users.
 
 ---
 
 ## 🚀 Features
 
-- **📖 Learn About Mental Health** – Access informative articles, tips, and resources to improve mental well-being.  
-- **🏥 Book Appointments** – Schedule consultations with certified mental health professionals easily.  
-- **💰 Donate** – Support mental health programs and initiatives through secure donations.  
-- **✍️ Write Blogs** – Share personal experiences, insights, or mental health stories.  
+- **📖 Learn About Mental Health** – Access articles, tips, and resources to improve mental well-being.  
+- **🏥 Book Appointments** – Schedule consultations with licensed mental health professionals.  
+- **💰 Donate** – Support mental health programs through secure contributions.  
+- **✍️ Write Blogs** – Share personal stories, experiences, or insights.  
 - **🔐 Secure & Private** – User data is protected with modern security standards.  
-- **🌐 Responsive Design** – Fully accessible on desktop, tablet, and mobile devices.
+- **🌐 Responsive Design** – Accessible on desktop, tablet, and mobile devices.
 
 ---
 
 ## 🛠️ Tech Stack
 
 - **Frontend:** Next.js, React, Tailwind CSS  
-- **Backend:** Node.js (API routes), Prisma ORM  
+- **Backend:** Node.js (API Routes), Prisma ORM  
 - **Database:** PostgreSQL  
 - **Authentication:** JWT / Session-based login  
 - **Deployment:** Vercel (Frontend), PostgreSQL hosted database  
@@ -32,14 +38,17 @@ The platform focuses on providing a **secure, accessible, and supportive environ
 
 Follow these steps to run **CALMPANION** locally:
 
-### Prerequisites
-Make sure you have these installed:
+### 1️⃣ Prerequisites
+Install the following tools:
 
 - [Node.js](https://nodejs.org/) (v18+ recommended)  
 - [Git](https://git-scm.com/)  
+- [PostgreSQL](https://www.postgresql.org/) (for local database setup)
 
-### Installation
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Navanith-Krishna-R/Full-Stack-CALMPANION.git
-   cd Full-Stack-CALMPANION
+---
+
+### 2️⃣ Clone the Repository
+```bash
+git clone https://github.com/Navanith-Krishna-R/Full-Stack-CALMPANION.git
+cd Full-Stack-CALMPANION
+
