@@ -46,9 +46,30 @@ Install the following tools:
 - [PostgreSQL](https://www.postgresql.org/) (for local database setup)
 
 ---
+### Installation
+1. Clone the repository:
+   ```sh
+   git clone https://(https://github.com/Navanith-Krishna-R/Full-Stack-CALMPANION/edit/main/CALMPANION-Full-Stack)
+   ```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+3. Start the development server:
+   ```sh
+   npm run dev
+   ```
 
-### 2️⃣ Clone the Repository
-```bash
-git clone https://github.com/Navanith-Krishna-R/Full-Stack-CALMPANION.git
-cd Full-Stack-CALMPANION
+## 🏗️ Contributing
+We welcome contributions from the community! Follow these steps:
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature-branch`)
+3. Commit your changes (`git commit -m 'Add new feature'`)
+4. Push to the branch (`git push origin feature-branch`)
+5. Create a Pull Request
 
+## 📧 Contact
+For any inquiries or feedback, visit our website: [Navanith Krishna R](https://kingnavneeth.vercel.app/)
+
+---
+🌱 *Your mental well-being matters. CALMPANION is here to help!*
