@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # CALMPANION ðŸ§˜â€â™‚ï¸  
 _A Full-Stack Mental Health Support Platform_
 
@@ -141,3 +142,60 @@ For inquiries or feedback, feel free to reach out via -
 ðŸ’» GitHub: https://github.com/Navanith-Krishna-R
 
 ðŸŒ± Your mental well-being matters. CALMPANION is here to help!
+=======
+# CALMPANION í·˜â€â™‚ï¸  
+_A Full-Stack Mental Health Support Platform_
+
+í¼ **Live App:** https://full-stack-calmpanion.vercel.app/  
+í±¤ **Portfolio:** https://portfolio-bim74nzsl-navanith-krishna-rs-projects.vercel.app/
+
+---
+
+## í¼Ÿ Project Overview
+
+**CALMPANION** is a full-stack web application focused on **mental health awareness, accessibility, and support**.  
+It provides a secure and user-friendly platform where individuals can learn, connect with professionals, donate, and share experiences.
+
+---
+
+## íº€ Features
+
+- í³– Mental health resources  
+- í¿¥ Appointment booking  
+- í²° Secure donations  
+- âœï¸ Blog platform  
+- í´ JWT-based authentication  
+- í¼ Responsive UI  
+
+---
+
+## í» ï¸ Tech Stack
+
+- **Frontend:** Next.js, React, Tailwind CSS, shadcn/ui  
+- **Backend:** Next.js API Routes, Node.js, Prisma  
+- **Database:** PostgreSQL  
+- **Deployment:** Vercel  
+
+---
+
+## í²» API Routes
+
+- POST `/api/register`  
+- POST `/api/login`  
+- POST `/api/appointments`  
+- GET `/api/appointments`  
+- POST `/api/blogs`  
+- GET `/api/blogs`  
+
+---
+
+## í³§ Contact
+
+**Navanith Krishna R**  
+í´— Portfolio: https://portfolio-bim74nzsl-navanith-krishna-rs-projects.vercel.app/  
+í²» GitHub: https://github.com/Navanith-Krishna-R  
+
+---
+
+í¼± _Your mental well-being matters. CALMPANION is here to help!_
+>>>>>>> 5ef635b (Add final CALMPANION README)
