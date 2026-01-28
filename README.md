@@ -61,7 +61,7 @@ The project is designed with **real-world deployment, scalability, and security*
 ---
 
 ### 2️⃣ Clone the Repository
-```bash
+
 git clone https://github.com/Navanith-Krishna-R/Full-Stack-CALMPANION.git
 cd Full-Stack-CALMPANION
 
@@ -70,22 +70,22 @@ cd Full-Stack-CALMPANION
 # Install dependencies
 npm install
 
-# Create a .env file in the root directory and add:
+### Create a .env file in the root directory and add:
 DATABASE_URL=postgresql://USER:PASSWORD@localhost:5432/calmpanion
 JWT_SECRET=your-jwt-secret
 NEXTAUTH_SECRET=your-nextauth-secret
 NEXT_PUBLIC_NEWS_API_KEY=your-news-api-key
 
-# Run Prisma migrations
+### Run Prisma migrations
 npx prisma migrate dev --name init
 
-# Generate Prisma client
+### Generate Prisma client
 npx prisma generate
 
-# (Optional) Open Prisma Studio
+### (Optional) Open Prisma Studio
 npx prisma studio
 
-# Start the development server
+### Start the development server
 npm run dev
 
 ##📦 Project Structure
@@ -119,7 +119,7 @@ GET /api/blogs – Retrieve blog posts
 
 ---
 
-##🔗 Deployment
+###🔗 Deployment
 Push the project to GitHub
 
 Import the repository into Vercel
@@ -138,13 +138,13 @@ Live URL:
 1. Fork the repository
 
 2. Create a feature branch:
-```bash
+
 git checkout -b feature/your-feature
 
 
 ---
 
-##📧 Contact
+## 📧 Contact
 Navanith Krishna R – 🔗 Portfolio: https://portfolio-bim74nzsl-navanith-krishna-rs-projects.vercel.app/
 
 For inquiries or feedback, feel free to reach out via -
