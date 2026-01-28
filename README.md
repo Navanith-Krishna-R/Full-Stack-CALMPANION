@@ -2,7 +2,6 @@
 # CALMPANION 🧘‍♂️  
 _A Full-Stack Mental Health Support Platform_
 
-🌐 **Live App:** https://full-stack-calmpanion.vercel.app/  
 👤 **Portfolio:** https://portfolio-bim74nzsl-navanith-krishna-rs-projects.vercel.app/
 
 ---
@@ -119,8 +118,6 @@ Add environment variables in Vercel Dashboard
 
 Deploy 🚀
 
-Live URL:
-👉 https://full-stack-calmpanion.vercel.app/
 
 ---
 
