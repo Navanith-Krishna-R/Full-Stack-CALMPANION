@@ -67,7 +67,7 @@ cd Full-Stack-CALMPANION
 
 ---
 ### 3️⃣ Install Dependencies
-# Install dependencies
+
 npm install
 
 ### Create a .env file in the root directory and add:
