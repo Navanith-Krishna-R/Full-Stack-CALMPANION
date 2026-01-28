@@ -7,6 +7,7 @@ _A Full-Stack Mental Health Support Platform_
 ---
 
 ## 🌟 Project Overview
+
 **CALMPANION** is a full-stack web application focused on **mental health awareness, accessibility, and support**.  
 It provides a secure and user-friendly platform where individuals can **learn, connect with professionals, donate, and share experiences** in a supportive environment.
 
@@ -47,120 +48,106 @@ The project is designed with **real-world deployment, scalability, and security*
 ### Deployment
 - Vercel (Frontend & APIs)
 - Cloud-hosted PostgreSQL
+
+---
+
+## ⚙️ Getting Started (Local Setup)
+
+### 1️⃣ Prerequisites
+- Node.js (v18+)
+- Git
+- PostgreSQL
+
 ---
 
 ### 2️⃣ Clone the Repository
 ```bash
 git clone https://github.com/Navanith-Krishna-R/Full-Stack-CALMPANION.git
 cd Full-Stack-CALMPANION
-3️⃣ Install Dependencies
-bash
-Copy
-Edit
+
+---
+### 3️⃣ Install Dependencies
+# Install dependencies
 npm install
-4️⃣ Set Up Environment Variables
-Create a .env file in the root folder and add your environment variables:
 
-env
-Copy
-Edit
+# Create a .env file in the root directory and add:
 DATABASE_URL=postgresql://USER:PASSWORD@localhost:5432/calmpanion
-NEXTAUTH_SECRET=your-secret-key
 JWT_SECRET=your-jwt-secret
-Note: Replace USER, PASSWORD, and your-secret-key with your actual credentials.
+NEXTAUTH_SECRET=your-nextauth-secret
+NEXT_PUBLIC_NEWS_API_KEY=your-news-api-key
 
-5️⃣ Set Up the Database
-Run Prisma migrations to create the database schema:
-
-bash
-Copy
-Edit
+# Run Prisma migrations
 npx prisma migrate dev --name init
-Generate the Prisma client:
 
-bash
-Copy
-Edit
+# Generate Prisma client
 npx prisma generate
-You can also open Prisma Studio to view and manage your database:
 
-bash
-Copy
-Edit
+# (Optional) Open Prisma Studio
 npx prisma studio
-6️⃣ Run the Development Server
-bash
-Copy
-Edit
-npm run dev
-Visit http://localhost:3000 in your browser.
 
-📦 Project Structure
-bash
-Copy
-Edit
+# Start the development server
+npm run dev
+
+##📦 Project Structure
+
 CALMPANION/
-├── app/                  # Next.js pages and API routes
+├── app/                  # Next.js pages & API routes
 ├── components/           # Reusable React components
-├── prisma/               # Prisma schema and migrations
-├── public/               # Static assets (images, logos, etc.)
-├── styles/               # CSS / Tailwind files
-├── .env                  # Environment variables
+├── context/              # Global state
+├── hooks/                # Custom hooks
+├── lib/                  # Prisma, auth, utilities
+├── prisma/               # Prisma schema & migrations
+├── public/               # Static assets
 ├── package.json
 └── README.md
-💻 API Routes
+
+---
+
+##💻 API Routes
+
 POST /api/register – Register a new user
 
-POST /api/login – Authenticate a user
+POST /api/login – Authenticate user
 
 POST /api/appointments – Book an appointment
 
-GET /api/appointments – Get user's appointments
+GET /api/appointments – Get user appointments
 
-POST /api/blogs – Create a new blog post
+POST /api/blogs – Create a blog post
 
 GET /api/blogs – Retrieve blog posts
 
-🔗 Deployment
-Push your code to GitHub:
+---
 
-bash
-Copy
-Edit
-git add .
-git commit -m "Initial commit"
-git push origin main
-Connect your repository to Vercel for frontend deployment.
+##🔗 Deployment
+Push the project to GitHub
 
-Make sure to set environment variables in Vercel Dashboard to match .env.
+Import the repository into Vercel
 
-🛠️ Contribution Guidelines
-We welcome contributions! Follow these steps:
+Add environment variables in Vercel Dashboard
 
-Fork the repository
+Deploy 🚀
 
-Create a feature branch:
+Live URL:
+👉 https://full-stack-calmpanion.vercel.app/
 
-bash
-Copy
-Edit
+---
+
+## 🛠️ Contribution Guidelines
+
+1. Fork the repository
+
+2. Create a feature branch:
+```bash
 git checkout -b feature/your-feature
-Make your changes and commit:
 
-bash
-Copy
-Edit
-git commit -m "Add your feature"
-Push your branch:
 
-bash
-Copy
-Edit
-git push origin feature/your-feature
-Open a Pull Request on GitHub
+---
 
-📧 Contact
-Navanith Krishna R – Portfolio
-For inquiries or feedback, feel free to reach out via GitHub.
+##📧 Contact
+Navanith Krishna R – 🔗 Portfolio: https://portfolio-bim74nzsl-navanith-krishna-rs-projects.vercel.app/
+
+For inquiries or feedback, feel free to reach out via -
+💻 GitHub: https://github.com/Navanith-Krishna-R
 
 🌱 Your mental well-being matters. CALMPANION is here to help!
