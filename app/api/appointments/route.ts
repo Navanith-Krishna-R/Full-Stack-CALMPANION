@@ -1,13 +1,16 @@
-import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { z } from 'zod';
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { z } from "zod";
+
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 // Validate incoming appointment data
 const AppointmentSchema = z.object({
   userEmail: z.string().email(),
-  date: z.string(),      // ISO date string
-  time: z.string(),      // e.g., "09:00 AM"
-  type: z.string(),      // appointment type id
+  date: z.string(), // ISO date string
+  time: z.string(), // e.g., "09:00 AM"
+  type: z.string(), // appointment type
   notes: z.string().optional(),
 });
 
@@ -17,15 +20,24 @@ export async function POST(req: Request) {
     const parsed = AppointmentSchema.safeParse(body);
 
     if (!parsed.success) {
-      return NextResponse.json({ message: 'Invalid input' }, { status: 400 });
+      return NextResponse.json(
+        { message: "Invalid input" },
+        { status: 400 }
+      );
     }
 
     const { userEmail, date, time, type, notes } = parsed.data;
 
     // Find user by email
-    const user = await prisma.user.findUnique({ where: { email: userEmail } });
+    const user = await prisma.user.findUnique({
+      where: { email: userEmail },
+    });
+
     if (!user) {
-      return NextResponse.json({ message: 'User not found' }, { status: 404 });
+      return NextResponse.json(
+        { message: "User not found" },
+        { status: 404 }
+      );
     }
 
     // Create appointment
@@ -39,10 +51,18 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json({ message: 'Appointment booked successfully', appointment }, { status: 200 });
-
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json({ message: 'Server error' }, { status: 500 });
+    return NextResponse.json(
+      {
+        message: "Appointment booked successfully",
+        appointment,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Appointment API error:", error);
+    return NextResponse.json(
+      { message: "Server error" },
+      { status: 500 }
+    );
   }
 }
