@@ -66,27 +66,29 @@ git clone https://github.com/Navanith-Krishna-R/Full-Stack-CALMPANION.git
 cd Full-Stack-CALMPANION
 
 ---
-## 3️⃣ Install Dependencies
-# Install dependencies
+
+## Install dependencies
 npm install
 
-# Create a .env file in the root directory and add:
+## Create a .env file in the root directory and add:
 DATABASE_URL=postgresql://USER:PASSWORD@localhost:5432/calmpanion
 JWT_SECRET=your-jwt-secret
 NEXTAUTH_SECRET=your-nextauth-secret
 NEXT_PUBLIC_NEWS_API_KEY=your-news-api-key
 
-# Run Prisma migrations
+## Run Prisma migrations
 npx prisma migrate dev --name init
 
-# Generate Prisma client
+## Generate Prisma client
 npx prisma generate
 
-# (Optional) Open Prisma Studio
+## (Optional) Open Prisma Studio
 npx prisma studio
 
-# Start the development server
+## Start the development server
 npm run dev
+
+---
 
 ## 📦 Project Structure
 
