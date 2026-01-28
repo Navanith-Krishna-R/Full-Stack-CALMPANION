@@ -1,50 +1,52 @@
-# CALMPANION 🧘‍♂️
+# CALMPANION 🧘‍♂️  
+_A Full-Stack Mental Health Support Platform_
+
+🌐 **Live App:** https://full-stack-calmpanion.vercel.app/  
+👤 **Portfolio:** https://portfolio-bim74nzsl-navanith-krishna-rs-projects.vercel.app/
+
+---
 
 ## 🌟 Project Overview
-**CALMPANION** is a comprehensive online platform dedicated to **mental health awareness and support**.  
-It empowers users to take control of their mental well-being by providing:
+**CALMPANION** is a full-stack web application focused on **mental health awareness, accessibility, and support**.  
+It provides a secure and user-friendly platform where individuals can **learn, connect with professionals, donate, and share experiences** in a supportive environment.
 
-- Educational resources about mental health  
-- Scheduling appointments with certified professionals  
-- Secure donations to mental health initiatives  
-- Sharing experiences via blogs  
-
-The platform emphasizes **security, accessibility, and a supportive environment** for all users.
+The project is designed with **real-world deployment, scalability, and security** in mind.
 
 ---
 
 ## 🚀 Features
 
-- **📖 Learn About Mental Health** – Access articles, tips, and resources to improve mental well-being.  
-- **🏥 Book Appointments** – Schedule consultations with licensed mental health professionals.  
-- **💰 Donate** – Support mental health programs through secure contributions.  
-- **✍️ Write Blogs** – Share personal stories, experiences, or insights.  
-- **🔐 Secure & Private** – User data is protected with modern security standards.  
-- **🌐 Responsive Design** – Accessible on desktop, tablet, and mobile devices.
+- 📖 **Mental Health Resources** – Educational content and awareness materials  
+- 🏥 **Appointment Booking** – Schedule consultations with mental health professionals  
+- 💰 **Secure Donations** – Support mental health initiatives  
+- ✍️ **Blog Platform** – Users can write and share experiences  
+- 🔐 **Authentication & Security** – JWT-based authentication and protected APIs  
+- 🌐 **Responsive UI** – Works seamlessly across all devices  
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** Next.js, React, Tailwind CSS  
-- **Backend:** Node.js (API Routes), Prisma ORM  
-- **Database:** PostgreSQL  
-- **Authentication:** JWT / Session-based login  
-- **Deployment:** Vercel (Frontend), PostgreSQL hosted database  
+### Frontend
+- Next.js (App Router)
+- React
+- Tailwind CSS
+- shadcn/ui
 
----
+### Backend
+- Next.js API Routes
+- Node.js
+- Prisma ORM
 
-## 🎯 Getting Started
+### Database
+- PostgreSQL
 
-Follow these steps to run **CALMPANION** locally:
+### Authentication
+- JWT / Session-based authentication
 
-### 1️⃣ Prerequisites
-Install the following tools:
-
-- [Node.js](https://nodejs.org/) (v18+ recommended)  
-- [Git](https://git-scm.com/)  
-- [PostgreSQL](https://www.postgresql.org/) (for local database setup)
-
+### Deployment
+- Vercel (Frontend & APIs)
+- Cloud-hosted PostgreSQL
 ---
 
 ### 2️⃣ Clone the Repository
