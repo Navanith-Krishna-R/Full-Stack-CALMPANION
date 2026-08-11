@@ -2,8 +2,6 @@
 
 *A calmer space for your mental wellbeing.*
 
-👤 **Portfolio:** https://portfolio-bim74nzsl-navanith-krishna-rs-projects.vercel.app/
-
 ---
 
 ## Overview
@@ -199,5 +197,4 @@ accept or reject pending ones (rejecting asks for confirmation first — never a
   arbitrary status strings are rejected with 400, not silently coerced.
 
 **Navanith Krishna R**
-🔗 Portfolio: https://portfolio-bim74nzsl-navanith-krishna-rs-projects.vercel.app/
 💻 GitHub: https://github.com/Navanith-Krishna-R
