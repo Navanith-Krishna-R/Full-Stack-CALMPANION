@@ -1,68 +1,69 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { z } from "zod";
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { z } from 'zod';
+import { getServerSession } from '@/lib/session';
 
-export const dynamic = "force-dynamic";
-export const runtime = "nodejs";
-
-// Validate incoming appointment data
+// Note: the user is always taken from the server-verified session, never
+// from the request body — a client can no longer book (or read) appointments
+// on behalf of another user's email address.
 const AppointmentSchema = z.object({
-  userEmail: z.string().email(),
-  date: z.string(), // ISO date string
-  time: z.string(), // e.g., "09:00 AM"
-  type: z.string(), // appointment type
-  notes: z.string().optional(),
+  date: z.string().refine((v) => !Number.isNaN(Date.parse(v)), 'Invalid date'),
+  time: z.string().min(1, 'Time is required'),
+  type: z.string().min(1, 'Appointment type is required'),
+  notes: z.string().max(2000).optional(),
 });
 
 export async function POST(req: Request) {
   try {
+    const session = await getServerSession();
+    if (!session) {
+      return NextResponse.json({ message: 'Please log in to book an appointment' }, { status: 401 });
+    }
+
     const body = await req.json();
     const parsed = AppointmentSchema.safeParse(body);
-
     if (!parsed.success) {
       return NextResponse.json(
-        { message: "Invalid input" },
+        { message: parsed.error.issues[0]?.message ?? 'Invalid input' },
         { status: 400 }
       );
     }
 
-    const { userEmail, date, time, type, notes } = parsed.data;
+    const { date, time, type, notes } = parsed.data;
 
-    // Find user by email
-    const user = await prisma.user.findUnique({
-      where: { email: userEmail },
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        { message: "User not found" },
-        { status: 404 }
-      );
+    const parsedDate = new Date(date);
+    if (parsedDate.getTime() < Date.now() - 24 * 60 * 60 * 1000) {
+      return NextResponse.json({ message: 'Appointment date cannot be in the past' }, { status: 400 });
     }
 
-    // Create appointment
     const appointment = await prisma.appointment.create({
       data: {
-        userId: user.id,
-        date: new Date(date),
+        userId: session.sub,
+        date: parsedDate,
         time,
         type,
         notes,
       },
     });
 
-    return NextResponse.json(
-      {
-        message: "Appointment booked successfully",
-        appointment,
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Appointment API error:", error);
-    return NextResponse.json(
-      { message: "Server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: 'Appointment booked successfully', appointment }, { status: 201 });
+  } catch (err) {
+    console.error('appointments POST error:', err);
+    return NextResponse.json({ message: 'Server error' }, { status: 500 });
   }
+}
+
+// Lists only the authenticated caller's own appointments.
+export async function GET() {
+  const session = await getServerSession();
+  if (!session) {
+    return NextResponse.json({ message: 'Please log in to view your appointments' }, { status: 401 });
+  }
+
+  const appointments = await prisma.appointment.findMany({
+    where: { userId: session.sub },
+    orderBy: { date: 'asc' },
+  });
+
+  return NextResponse.json({ appointments });
 }

@@ -4,27 +4,83 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
-model Appointment {
-  id        Int      @id @default(autoincrement())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  date      DateTime
-  time      String
-  type      String
-  notes     String?
-  createdAt DateTime @default(now())
+enum Role {
+  USER
+  ADMIN
+}
+
+enum AppointmentStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }
 
 model User {
-  id           String   @id @default(uuid())
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
   name         String
   email        String   @unique
   passwordHash String
-  appointments Appointment[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+
+  // Never assignable by the client — only ever set server-side (registration
+  // always defaults to USER; promotion to ADMIN happens only via the
+  // scripts/make-admin.js bootstrap script run directly against the DB).
+  role Role @default(USER)
+
+  // Single-use password reset token. Stored as a SHA-256 hash, never the raw
+  // token, so a database read alone can never be used to reset a password.
+  resetTokenHash      String?
+  resetTokenExpiresAt DateTime?
+
+  appointments      Appointment[]
+  blogPosts         BlogPost[]
+  assessmentResults AssessmentResult[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Appointment {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+
+  type   String
+  date   DateTime
+  time   String
+  notes  String?
+  status AppointmentStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BlogPost {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  authorId String @db.ObjectId
+  author   User   @relation(fields: [authorId], references: [id])
+
+  title     String
+  content   String
+  category  String
+  published Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AssessmentResult {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+
+  quizType String
+  answers  Json
+  score    Int
+  summary  String
+
+  createdAt DateTime @default(now())
 }

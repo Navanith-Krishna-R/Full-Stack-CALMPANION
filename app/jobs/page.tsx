@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { Briefcase } from 'lucide-react';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
@@ -47,10 +48,10 @@ export default function Jobs() {
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="pt-32 pb-16 px-4 bg-gradient-to-b from-orange-50 to-white dark:from-orange-950 dark:to-background">
+        <section className="pt-36 pb-16 px-4 bg-organic-gradient">
           <div className="max-w-7xl mx-auto text-center">
-            <h1 className="text-5xl font-bold mb-6">
-              Careers in <span className="text-orange-500">Mental Health</span>
+            <h1 className="text-5xl font-display font-medium mb-6">
+              Careers in <span className="text-primary">Mental Health</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Be part of our mission to make mental health care accessible and impactful.  
@@ -66,13 +67,13 @@ export default function Jobs() {
               <Card key={job.id} className="p-6 rounded-2xl shadow-sm hover:shadow-lg transition">
                 <CardContent>
                   <div className="flex items-center gap-3 mb-4">
-                    <Briefcase className="w-6 h-6 text-orange-500" />
+                    <Briefcase className="w-6 h-6 text-primary" />
                     <h3 className="text-xl font-semibold">{job.title}</h3>
                   </div>
                   <p className="text-muted-foreground mb-4">{job.description}</p>
                   <p className="text-sm text-gray-500 mb-2">📍 {job.location}</p>
                   <p className="text-sm text-gray-500 mb-4">🕒 {job.type}</p>
-                  <Button onClick={() => handleOpen(job)} className="w-full bg-orange-500 hover:bg-orange-600 text-white">
+                  <Button onClick={() => handleOpen(job)} className="w-full bg-sage-500 hover:bg-sage-800 text-white">
                     View Details
                   </Button>
                 </CardContent>
@@ -95,9 +96,13 @@ export default function Jobs() {
             <p><strong>📍 Location:</strong> {selectedJob?.location}</p>
             <p><strong>🕒 Type:</strong> {selectedJob?.type}</p>
           </div>
+          <p className="text-sm text-muted-foreground">
+            There&apos;s no automated application pipeline yet — reach out via the{' '}
+            <Link href="/about" className="text-primary font-semibold" onClick={() => setOpen(false)}>about page</Link>{' '}
+            to express interest in this role.
+          </p>
           <DialogFooter className="flex gap-3">
             <Button onClick={() => setOpen(false)} variant="outline">Close</Button>
-            <Button className="bg-orange-500 hover:bg-orange-600 text-white">Apply Now</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

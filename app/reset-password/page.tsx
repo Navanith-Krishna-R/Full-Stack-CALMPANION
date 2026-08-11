@@ -1,53 +1,28 @@
-'use client';
+import Link from 'next/link';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
 
-import { useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-
-export default function ResetPassword() {
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const router = useRouter();
-  const { token } = useParams();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const res = await fetch(`/api/reset-password/${token}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
-      });
-      const data = await res.json();
-      setMessage(data.message);
-      if (res.ok) setTimeout(() => router.push('/login'), 2000);
-    } catch (err) {
-      console.error(err);
-      setMessage('Something went wrong');
-    }
-  };
-
+// Reached when someone visits /reset-password without a token (e.g. a bookmarked
+// or truncated link). Real reset links point to /reset-password/[token].
+export default function ResetPasswordMissingToken() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="bg-card p-8 rounded-2xl shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6">Reset Password</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="password"
-            placeholder="New password"
-            className="w-full p-3 border rounded-lg"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button
-            type="submit"
-            className="w-full bg-orange-500 text-white p-3 rounded-lg font-semibold"
+    <div className="min-h-screen bg-background flex flex-col">
+      <Header />
+      <main className="flex-grow flex items-center justify-center px-4 py-32">
+        <div className="bg-card p-8 rounded-2xl shadow-lg border border-border w-full max-w-md text-center space-y-4">
+          <h1 className="text-2xl font-display font-medium">Reset link missing</h1>
+          <p className="text-sm text-muted-foreground">
+            This link is missing a reset token. Request a new password reset email to continue.
+          </p>
+          <Link
+            href="/forgot-password"
+            className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-full font-semibold hover:bg-sage-800 transition"
           >
-            Update Password
-          </button>
-        </form>
-        {message && <p className="mt-4 text-center text-sm text-green-500">{message}</p>}
-      </div>
+            Request a new link
+          </Link>
+        </div>
+      </main>
+      <Footer />
     </div>
   );
 }

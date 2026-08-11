@@ -1,14 +1,20 @@
 'use client';
 
 import React, { useState } from 'react';
-import { PenSquare, Image as ImageIcon, Link as LinkIcon, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+import { PenSquare, Image as ImageIcon, Link as LinkIcon, ArrowRight, CheckCircle2 } from 'lucide-react';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+import { useUser } from '@/context/UserContext';
 
 export default function WriteBlog() {
+  const { userEmail, loading: userLoading } = useUser();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
 
   const categories = [
     'Mental Health Tips',
@@ -18,16 +24,59 @@ export default function WriteBlog() {
     'Research & News'
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real application, this would send data to a backend
-    console.log('Blog post submitted:', { title, content, category });
-    alert('Blog post submitted successfully! (Demo only)');
-    // Clear form
-    setTitle('');
-    setContent('');
-    setCategory('');
+    setError('');
+    setSubmitting(true);
+
+    try {
+      const res = await fetch('/api/blogs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content, category }),
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        setError(data.message || 'Could not publish your post. Please try again.');
+        return;
+      }
+
+      setSuccess(true);
+      setTitle('');
+      setContent('');
+      setCategory('');
+    } catch (err) {
+      console.error(err);
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  if (!userLoading && !userEmail) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col">
+        <Header />
+        <main className="flex-grow flex items-center justify-center px-4 py-32 text-center">
+          <div className="max-w-md">
+            <PenSquare className="w-16 h-16 text-primary mx-auto mb-6" />
+            <h1 className="text-3xl font-bold mb-4">Log in to write a post</h1>
+            <p className="text-muted-foreground mb-8">
+              You need an account to share your story with the CALMPANION community.
+            </p>
+            <Link
+              href="/login"
+              className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-sage-800 transition"
+            >
+              Log In
+            </Link>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -37,7 +86,7 @@ export default function WriteBlog() {
         {/* Hero Section */}
         <section className="pt-32 pb-16 px-4">
           <div className="max-w-7xl mx-auto text-center">
-            <PenSquare className="w-16 h-16 text-orange-500 mx-auto mb-6" />
+            <PenSquare className="w-16 h-16 text-primary mx-auto mb-6" />
             <h1 className="text-5xl font-bold mb-6">
               Share Your Story
             </h1>
@@ -51,6 +100,24 @@ export default function WriteBlog() {
         <section className="py-16 px-4">
           <div className="max-w-4xl mx-auto">
             <div className="bg-card p-8 rounded-2xl shadow-lg">
+              {success ? (
+                <div className="text-center py-8">
+                  <CheckCircle2 className="w-14 h-14 text-primary mx-auto mb-6" />
+                  <h2 className="text-2xl font-bold mb-2">Post published!</h2>
+                  <p className="text-muted-foreground mb-8">Your story is now live on the CALMPANION blog.</p>
+                  <div className="flex flex-wrap gap-4 justify-center">
+                    <Link href="/blogs" className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-sage-800 transition">
+                      View Blog
+                    </Link>
+                    <button
+                      onClick={() => setSuccess(false)}
+                      className="px-6 py-3 rounded-lg border-2 border-sage-500 text-primary font-semibold hover:bg-sage-50 dark:hover:bg-sage-950 transition"
+                    >
+                      Write Another
+                    </button>
+                  </div>
+                </div>
+              ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Title */}
                 <div>
@@ -61,7 +128,7 @@ export default function WriteBlog() {
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-sage-500"
                     placeholder="Enter a compelling title..."
                     required
                   />
@@ -75,7 +142,7 @@ export default function WriteBlog() {
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-sage-500"
                     required
                   >
                     <option value="">Select a category</option>
@@ -111,7 +178,7 @@ export default function WriteBlog() {
                   <textarea
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
-                    className="w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-sage-500"
                     rows={12}
                     placeholder="Share your thoughts..."
                     required
@@ -129,22 +196,20 @@ export default function WriteBlog() {
                   </ul>
                 </div>
 
+                {error && <p className="text-sm text-red-500">{error}</p>}
+
                 {/* Submit Button */}
                 <div className="flex justify-end gap-4">
                   <button
-                    type="button"
-                    className="px-6 py-3 rounded-lg border-2 border-orange-500 text-orange-500 font-semibold hover:bg-orange-50 dark:hover:bg-orange-950 transition"
-                  >
-                    Save Draft
-                  </button>
-                  <button
                     type="submit"
-                    className="px-6 py-3 rounded-lg bg-orange-500 text-white font-semibold hover:bg-orange-600 transition flex items-center gap-2"
+                    disabled={submitting}
+                    className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-sage-800 transition flex items-center gap-2 disabled:opacity-60"
                   >
-                    Publish <ArrowRight className="w-4 h-4" />
+                    {submitting ? 'Publishing…' : 'Publish'} <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </form>
+              )}
             </div>
           </div>
         </section>

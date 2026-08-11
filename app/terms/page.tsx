@@ -12,13 +12,13 @@ export default function Terms() {
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="pt-32 pb-16 px-4 bg-gradient-to-b from-orange-50 to-white dark:from-orange-950 dark:to-background">
+        <section className="pt-32 pb-16 px-4 bg-gradient-to-b from-sage-50 to-white dark:from-sage-950 dark:to-background">
           <div className="max-w-7xl mx-auto text-center">
             <h1 className="text-5xl font-bold mb-6">
               Terms & Conditions
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Please read these terms carefully before using <span className="text-orange-500">Calmpanion</span>.  
+              Please read these terms carefully before using <span className="text-primary">Calmpanion</span>.  
               By accessing or using our services, you agree to be bound by these terms.
             </p>
           </div>
@@ -31,7 +31,7 @@ export default function Terms() {
             {/* Acceptance of Terms */}
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <FileText className="w-7 h-7 text-orange-500" />
+                <FileText className="w-7 h-7 text-primary" />
                 <h2 className="text-2xl font-bold">1. Acceptance of Terms</h2>
               </div>
               <p className="text-muted-foreground">
@@ -43,7 +43,7 @@ export default function Terms() {
             {/* Use of Services */}
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <UserCheck className="w-7 h-7 text-orange-500" />
+                <UserCheck className="w-7 h-7 text-primary" />
                 <h2 className="text-2xl font-bold">2. Use of Services</h2>
               </div>
               <p className="text-muted-foreground">
@@ -56,7 +56,7 @@ export default function Terms() {
             {/* Privacy & Data */}
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <Lock className="w-7 h-7 text-orange-500" />
+                <Lock className="w-7 h-7 text-primary" />
                 <h2 className="text-2xl font-bold">3. Privacy & Data Protection</h2>
               </div>
               <p className="text-muted-foreground">
@@ -68,7 +68,7 @@ export default function Terms() {
             {/* User Responsibilities */}
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <Shield className="w-7 h-7 text-orange-500" />
+                <Shield className="w-7 h-7 text-primary" />
                 <h2 className="text-2xl font-bold">4. User Responsibilities</h2>
               </div>
               <ul className="list-disc list-inside text-muted-foreground space-y-2">
@@ -81,7 +81,7 @@ export default function Terms() {
             {/* International Use */}
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <Globe className="w-7 h-7 text-orange-500" />
+                <Globe className="w-7 h-7 text-primary" />
                 <h2 className="text-2xl font-bold">5. International Use</h2>
               </div>
               <p className="text-muted-foreground">
@@ -93,7 +93,7 @@ export default function Terms() {
             {/* Limitation of Liability */}
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <AlertCircle className="w-7 h-7 text-orange-500" />
+                <AlertCircle className="w-7 h-7 text-primary" />
                 <h2 className="text-2xl font-bold">6. Limitation of Liability</h2>
               </div>
               <p className="text-muted-foreground">
