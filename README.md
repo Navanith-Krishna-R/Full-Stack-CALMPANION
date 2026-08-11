@@ -173,9 +173,16 @@ accept or reject pending ones (rejecting asks for confirmation first — never a
 1. Push the repository to GitHub.
 2. Import it into Vercel.
 3. Add the environment variables above in the Vercel project settings.
-4. Deploy. Vercel runs `prisma generate` automatically as part of the build; run
-   `npx prisma db push` once against your production `DATABASE_URL` (locally or via a one-off
-   script) before the first deploy so the collections/indexes exist.
+4. In MongoDB Atlas → Network Access, allow access from `0.0.0.0/0` (Anywhere) — Vercel's
+   serverless functions don't have a fixed IP, so without this every database call in production
+   will time out.
+5. Deploy. The Prisma Client generates into a custom folder (`lib/generated/prisma`) that's
+   gitignored, so it doesn't exist in a fresh clone — the `postinstall: prisma generate` script in
+   `package.json` is what regenerates it during Vercel's build. If you ever see a build fail with
+   "Failed to collect page data" pointing into Prisma's generated code, this is the first thing to check.
+6. Run `npx prisma db push` once against your production `DATABASE_URL` (locally, or from any
+   machine with access) before the first deploy so the collections/indexes exist. If you're using
+   the same Atlas cluster/database for local dev and production, this is already done.
 
 ## Security Notes
 
