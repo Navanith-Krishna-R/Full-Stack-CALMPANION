@@ -1,38 +1,20 @@
 'use client';
 
-import React, { useState } from 'react';
-import { BookOpen, Calendar, User, ArrowRight } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { BookOpen, Calendar, User, ArrowRight, PenSquare } from 'lucide-react';
 import { format } from 'date-fns';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 
-// Static blog data
-const BLOG_POSTS = [
-  {
-    id: '1',
-    title: 'Understanding Anxiety: A Comprehensive Guide',
-    content: 'Anxiety is a natural response to stress, but when it becomes overwhelming, it can affect our daily lives...',
-    category: 'Mental Health Tips',
-    created_at: '2024-03-20T10:00:00Z',
-    author: 'Dr. Sarah Johnson'
-  },
-  {
-    id: '2',
-    title: 'My Journey to Mental Wellness',
-    content: 'Three years ago, I found myself at a crossroads. The pressure of work, relationships, and personal expectations had taken its toll...',
-    category: 'Personal Stories',
-    created_at: '2024-03-19T15:30:00Z',
-    author: 'Michael Chen'
-  },
-  {
-    id: '3',
-    title: 'The Science Behind Meditation',
-    content: 'Recent studies have shown that regular meditation practice can have significant positive effects on mental health...',
-    category: 'Research & News',
-    created_at: '2024-03-18T09:15:00Z',
-    author: 'Dr. Emily Martinez'
-  }
-];
+interface BlogPost {
+  id: string;
+  title: string;
+  content: string;
+  category: string;
+  createdAt: string;
+  author: { name: string };
+}
 
 const categories = [
   'Mental Health Tips',
@@ -44,26 +26,53 @@ const categories = [
 
 export default function Blogs() {
   const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>('loading');
 
-  const filteredBlogs = selectedCategory
-    ? BLOG_POSTS.filter(blog => blog.category === selectedCategory)
-    : BLOG_POSTS;
+  useEffect(() => {
+    const controller = new AbortController();
+
+    setStatus('loading');
+    const query = selectedCategory ? `?category=${encodeURIComponent(selectedCategory)}` : '';
+    fetch(`/api/blogs${query}`, { signal: controller.signal })
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to load posts');
+        return res.json();
+      })
+      .then((data) => {
+        setPosts(data.posts ?? []);
+        setStatus('loaded');
+      })
+      .catch((err) => {
+        if (err.name === 'AbortError') return;
+        console.error(err);
+        setStatus('error');
+      });
+
+    return () => controller.abort();
+  }, [selectedCategory]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
-      
+
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="pt-32 pb-16 px-4 bg-gradient-to-b from-orange-50 to-white dark:from-orange-950 dark:to-background">
+        <section className="pt-32 pb-16 px-4 bg-gradient-to-b from-sage-50 to-white dark:from-sage-950 dark:to-background">
           <div className="max-w-7xl mx-auto text-center">
-            <BookOpen className="w-16 h-16 text-orange-500 mx-auto mb-6" />
+            <BookOpen className="w-16 h-16 text-primary mx-auto mb-6" />
             <h1 className="text-5xl font-bold mb-6">
               Mental Health Blog
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
               Explore insights, stories, and expert advice from our community of mental health professionals and advocates.
             </p>
+            <Link
+              href="/write-blog"
+              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-sage-800 transition"
+            >
+              <PenSquare className="w-4 h-4" /> Share Your Story
+            </Link>
           </div>
         </section>
 
@@ -74,9 +83,9 @@ export default function Blogs() {
               <button
                 onClick={() => setSelectedCategory('')}
                 className={`px-4 py-2 rounded-full whitespace-nowrap transition
-                  ${!selectedCategory 
-                    ? 'bg-orange-500 text-white' 
-                    : 'bg-muted hover:bg-orange-100 dark:hover:bg-orange-900'
+                  ${!selectedCategory
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-muted hover:bg-sage-100 dark:hover:bg-sage-900'
                   }`}
               >
                 All Posts
@@ -86,9 +95,9 @@ export default function Blogs() {
                   key={category}
                   onClick={() => setSelectedCategory(category)}
                   className={`px-4 py-2 rounded-full whitespace-nowrap transition
-                    ${selectedCategory === category 
-                      ? 'bg-orange-500 text-white' 
-                      : 'bg-muted hover:bg-orange-100 dark:hover:bg-orange-900'
+                    ${selectedCategory === category
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted hover:bg-sage-100 dark:hover:bg-sage-900'
                     }`}
                 >
                   {category}
@@ -101,29 +110,46 @@ export default function Blogs() {
         {/* Blog Posts Grid */}
         <section className="py-16 px-4">
           <div className="max-w-7xl mx-auto">
-            {filteredBlogs.length === 0 ? (
-              <div className="text-center text-muted-foreground">
-                No blog posts found {selectedCategory && `in ${selectedCategory}`}.
-              </div>
-            ) : (
+            {status === 'loading' && (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredBlogs.map((blog) => (
-                  <article key={blog.id} className="bg-card rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="bg-card rounded-2xl shadow-lg overflow-hidden animate-pulse h-64" />
+                ))}
+              </div>
+            )}
+
+            {status === 'error' && (
+              <div className="text-center text-muted-foreground">
+                Something went wrong loading posts. Please try again shortly.
+              </div>
+            )}
+
+            {status === 'loaded' && posts.length === 0 && (
+              <div className="text-center text-muted-foreground">
+                No blog posts found {selectedCategory && `in ${selectedCategory}`} yet.{' '}
+                <Link href="/write-blog" className="text-primary hover:text-sage-800 font-semibold">Be the first to write one.</Link>
+              </div>
+            )}
+
+            {status === 'loaded' && posts.length > 0 && (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {posts.map((blog) => (
+                  <article key={blog.id} className="glow-card bg-card rounded-2xl border border-border overflow-hidden">
                     <div className="p-6">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-                        <span className="bg-orange-100 dark:bg-orange-900 text-orange-500 px-3 py-1 rounded-full">
+                        <span className="bg-sage-100 dark:bg-sage-900 text-primary px-3 py-1 rounded-full">
                           {blog.category}
                         </span>
                         <span className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
-                          {format(new Date(blog.created_at), 'MMM d, yyyy')}
+                          {format(new Date(blog.createdAt), 'MMM d, yyyy')}
                         </span>
                       </div>
-                      
+
                       <h2 className="text-xl font-bold mb-4 line-clamp-2">
                         {blog.title}
                       </h2>
-                      
+
                       <p className="text-muted-foreground mb-6 line-clamp-3">
                         {blog.content}
                       </p>
@@ -132,12 +158,12 @@ export default function Blogs() {
                         <div className="flex items-center gap-2">
                           <User className="w-4 h-4 text-muted-foreground" />
                           <span className="text-sm text-muted-foreground">
-                            {blog.author}
+                            {blog.author?.name ?? 'Anonymous'}
                           </span>
                         </div>
-                        <button className="text-orange-500 hover:text-orange-600 transition flex items-center gap-1">
+                        <Link href={`/blogs/${blog.id}`} className="text-primary hover:text-sage-800 transition flex items-center gap-1">
                           Read More <ArrowRight className="w-4 h-4" />
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </article>

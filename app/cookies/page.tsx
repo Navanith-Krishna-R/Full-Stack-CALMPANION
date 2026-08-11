@@ -12,10 +12,10 @@ export default function CookiePolicy() {
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="pt-32 pb-16 px-4 bg-gradient-to-b from-orange-50 to-white dark:from-orange-950 dark:to-background">
+        <section className="pt-32 pb-16 px-4 bg-gradient-to-b from-sage-50 to-white dark:from-sage-950 dark:to-background">
           <div className="max-w-7xl mx-auto text-center">
             <h1 className="text-5xl font-bold mb-6">
-              Cookie <span className="text-orange-500">Policy</span>
+              Cookie <span className="text-primary">Policy</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               This Cookie Policy explains how Calmpanion uses cookies and similar technologies on our website.
@@ -27,7 +27,7 @@ export default function CookiePolicy() {
         <section className="py-16 px-4">
           <div className="max-w-5xl mx-auto space-y-8">
             <div className="flex items-start gap-4">
-              <Shield className="w-6 h-6 text-orange-500 mt-1" />
+              <Shield className="w-6 h-6 text-primary mt-1" />
               <div>
                 <h2 className="text-2xl font-bold mb-2">What Are Cookies?</h2>
                 <p className="text-muted-foreground">
@@ -37,7 +37,7 @@ export default function CookiePolicy() {
             </div>
 
             <div className="flex items-start gap-4">
-              <Shield className="w-6 h-6 text-orange-500 mt-1" />
+              <Shield className="w-6 h-6 text-primary mt-1" />
               <div>
                 <h2 className="text-2xl font-bold mb-2">How We Use Cookies</h2>
                 <p className="text-muted-foreground">
@@ -52,7 +52,7 @@ export default function CookiePolicy() {
             </div>
 
             <div className="flex items-start gap-4">
-              <Shield className="w-6 h-6 text-orange-500 mt-1" />
+              <Shield className="w-6 h-6 text-primary mt-1" />
               <div>
                 <h2 className="text-2xl font-bold mb-2">Managing Cookies</h2>
                 <p className="text-muted-foreground">
@@ -62,7 +62,7 @@ export default function CookiePolicy() {
             </div>
 
             <div className="flex items-start gap-4">
-              <Shield className="w-6 h-6 text-orange-500 mt-1" />
+              <Shield className="w-6 h-6 text-primary mt-1" />
               <div>
                 <h2 className="text-2xl font-bold mb-2">Consent</h2>
                 <p className="text-muted-foreground">

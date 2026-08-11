@@ -2,10 +2,11 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
+import { attachSessionCookie } from '@/lib/session';
 
 const LoginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
+  email: z.string().trim().toLowerCase().email(),
+  password: z.string().min(1),
 });
 
 export async function POST(req: Request) {
@@ -19,22 +20,24 @@ export async function POST(req: Request) {
 
     const { email, password } = parsed.data;
 
-    // Find user
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      return NextResponse.json({ message: 'Invalid credentials' }, { status: 401 });
+      return NextResponse.json({ message: 'Invalid email or password' }, { status: 401 });
     }
 
-    // Verify password
     const isValid = await bcrypt.compare(password, user.passwordHash);
     if (!isValid) {
-      return NextResponse.json({ message: 'Invalid credentials' }, { status: 401 });
+      return NextResponse.json({ message: 'Invalid email or password' }, { status: 401 });
     }
 
-    // Success
-    return NextResponse.json({ message: 'Logged in', email: user.email, name: user.name }, { status: 200 });
+    const response = NextResponse.json(
+      { message: 'Logged in', user: { id: user.id, name: user.name, email: user.email } },
+      { status: 200 }
+    );
+
+    return attachSessionCookie(response, { sub: user.id, email: user.email, name: user.name });
   } catch (err) {
-    console.error(err);
+    console.error('login error:', err);
     return NextResponse.json({ message: 'Server error' }, { status: 500 });
   }
 }

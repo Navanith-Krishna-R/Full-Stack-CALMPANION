@@ -5,10 +5,11 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { ArrowRight, Mail, Lock, User } from 'lucide-react';
+import { ArrowRight, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { useRouter } from 'next/navigation';
+import { useUser } from '@/context/UserContext';
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -24,14 +25,19 @@ type RegisterForm = z.infer<typeof registerSchema>;
 
 export default function Register() {
   const router = useRouter();
+  const { refresh } = useUser();
   const { register, handleSubmit, formState: { errors } } = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
   });
 
   const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const onSubmit = async (data: RegisterForm) => {
     setLoading(true);
+    setApiError('');
 
     // build payload: only send fields the API expects (omit confirmPassword)
     const payload = {
@@ -47,24 +53,20 @@ export default function Register() {
         body: JSON.stringify(payload),
       });
 
-      // parse response safely
       const json = await res.json().catch(() => ({}));
 
       if (res.ok) {
-        // success (201 or 200)
-        // optional: show a small message (you can remove alert if you prefer silent redirect)
-        // alert('Account created successfully!');
-        // redirect to login page
-        router.push('/login');
+        // Registration also sets the session cookie — sync context and go
+        // straight to the home page already logged in.
+        await refresh();
+        router.push('/');
       } else {
-        // server returned an error (400/409/500)
-        const message = json?.message || json?.error || 'Registration failed';
-        alert(message);
+        setApiError(json?.message || json?.error || 'Registration failed');
+        setLoading(false);
       }
     } catch (err) {
       console.error('Register request failed:', err);
-      alert('Something went wrong. Check console for details.');
-    } finally {
+      setApiError('Something went wrong. Please try again.');
       setLoading(false);
     }
   };
@@ -72,10 +74,11 @@ export default function Register() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
-      <main className="flex-grow flex items-center justify-center px-4 py-20">
+      <main className="flex-grow flex items-center justify-center px-4 py-32 bg-organic-gradient">
         <div className="w-full max-w-md">
-          <div className="bg-card p-8 rounded-2xl shadow-lg">
-            <h1 className="text-3xl font-bold text-center mb-8">Create Account</h1>
+          <div className="bg-card p-8 rounded-3xl shadow-lg border border-border">
+            <h1 className="text-3xl font-display font-medium text-center mb-2">Create Account</h1>
+            <p className="text-center text-sm text-muted-foreground mb-8">Begin your journey with CALMPANION.</p>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Name */}
@@ -87,7 +90,7 @@ export default function Register() {
                   <input
                     {...register('name')}
                     type="text"
-                    className="w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-orange-500 pl-10"
+                    className="w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary pl-10"
                     placeholder="Enter your full name"
                     disabled={loading}
                   />
@@ -105,7 +108,7 @@ export default function Register() {
                   <input
                     {...register('email')}
                     type="email"
-                    className="w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-orange-500 pl-10"
+                    className="w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary pl-10"
                     placeholder="Enter your email"
                     disabled={loading}
                   />
@@ -122,12 +125,20 @@ export default function Register() {
                 <div className="relative">
                   <input
                     {...register('password')}
-                    type="password"
-                    className="w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-orange-500 pl-10"
+                    type={showPassword ? 'text' : 'password'}
+                    className="w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary pl-10 pr-10"
                     placeholder="Create a password"
                     disabled={loading}
                   />
                   <Lock className="w-5 h-5 text-muted-foreground absolute left-3 top-3.5" />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="absolute right-3 top-3.5 text-muted-foreground hover:text-foreground"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
                 </div>
                 {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>}
               </div>
@@ -140,29 +151,39 @@ export default function Register() {
                 <div className="relative">
                   <input
                     {...register('confirmPassword')}
-                    type="password"
-                    className="w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-orange-500 pl-10"
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    className="w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary pl-10 pr-10"
                     placeholder="Confirm your password"
                     disabled={loading}
                   />
                   <Lock className="w-5 h-5 text-muted-foreground absolute left-3 top-3.5" />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword((v) => !v)}
+                    className="absolute right-3 top-3.5 text-muted-foreground hover:text-foreground"
+                    aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
                 </div>
                 {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword.message}</p>}
               </div>
+
+              {apiError && <p className="text-red-500 text-sm">{apiError}</p>}
 
               {/* Submit */}
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full ${loading ? 'bg-orange-300' : 'bg-orange-500 hover:bg-orange-600'} text-white py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2`}
+                className="w-full bg-primary text-primary-foreground py-3 rounded-full font-semibold hover:bg-sage-800 transition flex items-center justify-center gap-2 disabled:opacity-60"
               >
-                {loading ? 'Creating...' : 'Create Account'} <ArrowRight className="w-4 h-4" />
+                {loading ? 'Creating…' : 'Create Account'} <ArrowRight className="w-4 h-4" />
               </button>
             </form>
 
             <p className="mt-6 text-center text-sm text-muted-foreground">
               Already have an account?{' '}
-              <Link href="/login" className="text-orange-500 hover:text-orange-600 font-semibold">
+              <Link href="/login" className="text-primary hover:text-sage-800 font-semibold">
                 Sign in
               </Link>
             </p>

@@ -1,41 +1,67 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import nodemailer from 'nodemailer';
-import jwt from 'jsonwebtoken';
+import { z } from 'zod';
+import { generateResetToken } from '@/lib/reset-token';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
+const ForgotPasswordSchema = z.object({
+  email: z.string().trim().toLowerCase().email(),
+});
+
+// Always returns the same generic message regardless of whether the email
+// exists, so this endpoint can't be used to enumerate registered accounts.
+const GENERIC_RESPONSE = { message: 'If an account exists for that email, a reset link has been sent.' };
 
 export async function POST(req: Request) {
   try {
-    const { email } = await req.json();
-    const user = await prisma.user.findUnique({ where: { email } });
-
-    // Always respond with same message for security
-    if (!user) {
-      return NextResponse.json({ message: 'If this email exists, a reset link will be sent' });
+    const body = await req.json();
+    const parsed = ForgotPasswordSchema.safeParse(body);
+    if (!parsed.success) {
+      // Still generic — don't reveal validation details tied to enumeration.
+      return NextResponse.json(GENERIC_RESPONSE);
     }
 
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '15m' });
-    const resetUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password/${token}`;
+    const { email } = parsed.data;
+    const user = await prisma.user.findUnique({ where: { email } });
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
+    if (!user) {
+      return NextResponse.json(GENERIC_RESPONSE);
+    }
+
+    const { raw, hash, expiresAt } = generateResetToken();
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { resetTokenHash: hash, resetTokenExpiresAt: expiresAt },
     });
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: 'Reset Your Password',
-      html: `<p>Click <a href="${resetUrl}">here</a> to reset your password. Expires in 15 minutes.</p>`,
-    });
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const resetUrl = `${baseUrl}/reset-password/${raw}`;
 
-    return NextResponse.json({ message: 'If this email exists, a reset link will be sent' });
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+      });
+
+      await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Reset your CALMPANION password',
+        html: `<p>We received a request to reset your CALMPANION password.</p>
+               <p><a href="${resetUrl}">Click here to choose a new password</a>. This link expires in 15 minutes.</p>
+               <p>If you didn't request this, you can safely ignore this email.</p>`,
+      });
+    } else {
+      // No email credentials configured (e.g. local dev). Log so the flow is
+      // still testable without sending real mail.
+      console.warn('EMAIL_USER/EMAIL_PASS not set — password reset link:', resetUrl);
+    }
+
+    return NextResponse.json(GENERIC_RESPONSE);
   } catch (err) {
-    console.error(err);
-    return NextResponse.json({ message: 'Server error' }, { status: 500 });
+    console.error('forgot-password error:', err);
+    // Still generic on unexpected errors, to avoid leaking system state.
+    return NextResponse.json(GENERIC_RESPONSE);
   }
 }
